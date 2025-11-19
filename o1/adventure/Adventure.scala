@@ -72,5 +72,7 @@ class Adventure:
       this.turnCount += 1
     outcomeReport.getOrElse(s"""Unknown command: "$command".""")
 
+// testi moi
+
 end Adventure
 
