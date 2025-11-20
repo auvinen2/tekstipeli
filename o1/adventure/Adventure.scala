@@ -13,27 +13,45 @@ class Adventure:
   /** the name of the game */
   val title = "A Forest Adventure"
 
-  private val middle      = Area("Forest", "You are somewhere in the forest. There are a lot of trees here.\nBirds are singing.")
-  private val northForest = Area("Forest", "You are somewhere in the forest. A tangle of bushes blocks further passage north.\nBirds are singing.")
-  private val southForest = Area("Forest", "The forest just goes on and on.")
-  private val clearing    = Area("Forest Clearing", "You are at a small clearing in the middle of forest.\nNearly invisible, twisted paths lead in many directions.")
-  private val tangle      = Area("Tangle of Bushes", "You are in a dense tangle of bushes. It's hard to see exactly where you're going.")
-  private val home        = Area("Home", "Home sweet home! Now the only thing you need is a working remote control.")
+  /* tulee nyt vähän suomi - englanti - sekasikiö ihsm tuntuis tyhmält kirjottaa suomeks
+  * - muuttujat suomeks kartan luettavuuden takia*/
+  private val kaverinKoti = Area("Your friend's place", "Oh no! You just missed the last bus. \nDo you take the long walk home (south) or the shortcut through the woods (east)?")
+  private val polku       = Area("Path", "Ooh. it's getting darker in here. Well, can't turn back now.")
+  private val kallio      = Area("Cliff", "That's a steep drop right there! \nYou have to walk carefully, in case it's slippery.")
+  private val luola       = Area("Dark Cave", "This is kind of spooky... I don't remember this being here? \nWait, what- who's that?!?!")
+  private val tiheikko    = Area("Thick Brushwood of Spruces", "Ouch, the spruce needles really hurt against your face! \nYou struggle to keep your eyes open.")
+  private val kelokko     = Area("Dead Tree Forest", "The mighty dead pines stand before you, swaying lightly with the wind. \nYou feel you're getting closer to home.")
+  private val aukio       = Area("Forest Clearing", "At least the starry sky looks pretty. \nJust like the one you programmed during O1.")
+  private val lampi       = Area("Duck Pond", "You can't see any ducks. What could've scared them away?")
+  private val kaivo       = Area("The Old Well", "The silhouette of the well is almost visible in the darkness.")
+  private val metsa       = Area("Forest", "Erm... where did the path go? All you can see now are trees!")
+  private val pelto       = Area("Field", "How did you get here? And what's that dent in the grain?")
+  private val silta       = Area("The Creaky Bridge", "You sure hope this doesn't collapse! Wet socks are a pain.")
+  private val home        = Area("Home", "What a journey. Maybe next time you'll bring a flashlight.")
   private val destination = home
 
-  middle     .setNeighbors(Vector("north" -> northForest, "east" -> tangle, "south" -> southForest, "west" -> clearing   ))
-  northForest.setNeighbors(Vector(                        "east" -> tangle, "south" -> middle,      "west" -> clearing   ))
-  southForest.setNeighbors(Vector("north" -> middle,      "east" -> tangle, "south" -> southForest, "west" -> clearing   ))
-  clearing   .setNeighbors(Vector("north" -> northForest, "east" -> middle, "south" -> southForest, "west" -> northForest))
-  tangle     .setNeighbors(Vector("north" -> northForest, "east" -> home,   "south" -> southForest, "west" -> northForest))
-  home       .setNeighbors(Vector(                                                                  "west" -> tangle     ))
+/* sijaintien suhteet siten, kuin kartassa olisi kompassiruusu 
+(pohjoinen ylhäällä, itä oikealla jne)*/
+  kaverinKoti.setNeighbors(Vector(                        "east" -> polku,    "south" -> home                            ))
+  polku      .setNeighbors(Vector("north" -> metsa,       "east" -> silta,    "south" -> kallio                          ))
+  kallio     .setNeighbors(Vector("north" -> polku,                           "south" -> luola                           ))
+  luola      .setNeighbors(Vector("north" -> kallio,      "east" -> tiheikko                                             ))
+  tiheikko   .setNeighbors(Vector("north" -> kelokko,                                               "west" -> luola      ))
+  kelokko    .setNeighbors(Vector("north" -> aukio,       "east" -> home,     "south" -> tiheikko,  "west" -> silta      ))
+  aukio      .setNeighbors(Vector("north" -> lampi,                           "south" -> kelokko                         ))
+  lampi      .setNeighbors(Vector(                                            "south" -> aukio,      "west" -> kaivo     ))
+  kaivo      .setNeighbors(Vector("north" -> pelto,       "east" -> lampi,    "south" -> metsa                           ))
+  metsa      .setNeighbors(Vector("north" -> kaivo,                           "south" -> polku                           ))
+  pelto      .setNeighbors(Vector(                                            "south" -> kaivo                           ))
+  silta      .setNeighbors(Vector(                        "east" -> kelokko,                         "west" -> polku     ))
+  home       .setNeighbors(Vector(                                                                   "west" -> kelokko   ))
 
   // TODO: Uncomment the two lines below. Improve the code so that it places the items in clearing and southForest, respectively.
-  clearing.addItem(Item("battery", "It's a small battery cell. Looks new."))
-  southForest.addItem(Item("remote", "It's the remote control for your TV.\nWhat it was doing in the forest, you have no idea.\nProblem is, there's no battery."))
+  //clearing.addItem(Item("battery", "It's a small battery cell. Looks new."))
+  //southForest.addItem(Item("remote", "It's the remote control for your TV.\nWhat it was doing in the forest, you have no idea.\nProblem is, there's no battery."))
 
   /** The character that the player controls in the game. */
-  val player = Player(middle)
+  val player = Player(kaverinKoti)
 
   /** The number of turns that have passed since the start of the game. */
   var turnCount = 0
