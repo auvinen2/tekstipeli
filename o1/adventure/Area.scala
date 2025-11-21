@@ -12,6 +12,13 @@ import scala.collection.mutable.Map
 class Area(var name: String, var description: String):
 
   private var items = Map[String, Item]()
+  private var letters = Vector[String]()
+
+  def addLetter(letter: String) =
+    this.letters = this.letters :+ letter
+
+  def removeLetter(letter: String) =
+    this.letters = Vector[String]()
 
   def addItem(item: Item) = items += item.name -> item
 
@@ -50,8 +57,8 @@ class Area(var name: String, var description: String):
     * DIRECTIONS SEPARATED BY SPACES". The items and directions are listed in an arbitrary order. */
   def fullDescription: String =
     var exitList = ""
-    if items.nonEmpty then
-      exitList = s"\nYou see here: ${this.items.keys.mkString(" ")}"+"\n\nExits available: " + this.neighbors.keys.mkString(" ")
+    if letters.nonEmpty then
+      exitList = s"\nYou can think that could be the letter ${this.letters.mkString(" ")}"+"\n\nExits available: " + this.neighbors.keys.mkString(" ")
     else
       exitList = "\n\nExits available: " + this.neighbors.keys.mkString(" ")
     this.description + exitList

@@ -24,6 +24,8 @@ class Action(input: String):
       case "drop"       => Some(actor.drop(modifiers))
       case "examine"       => Some(actor.examine(modifiers))
       case "inventory"       => Some(s"${actor.inventory}")
+      case "remember"  => Some(actor.remember(this.modifiers))
+      case "check"     => Some(s"${actor.check}")
       case other       => None
 
   /** Returns a textual description of the action object, for debugging purposes. */

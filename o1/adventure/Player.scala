@@ -14,6 +14,8 @@ class Player(startingArea: Area):
   private var currentLocation = startingArea        // gatherer: changes in relation to the previous location
   private var quitCommandGiven = false              // one-way flag
 
+  private var letters = Vector[String]()
+
   /** Determines if the player has indicated a desire to quit the game. */
   def hasQuit = this.quitCommandGiven
 
@@ -45,7 +47,16 @@ class Player(startingArea: Area):
         case None => s"There is no${itemName} here to pick up."
       }
 
+  def remember(letter: String) =
+    this.letters = this.letters :+ letter
+    this.location.removeLetter(letter)
+    s"You remember the letter ${letter.toUpperCase} oddly well."
 
+  def check =
+    if this.letters.nonEmpty then
+      s"You have found these letters: \n${this.letters.flatMap(_.toUpperCase).mkString(", ")}"
+    else
+      "Looks like you haven't found any letters yet."
 
 
   def examine(itemName: String) =
