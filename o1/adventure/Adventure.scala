@@ -68,7 +68,7 @@ class Adventure:
 
 
   /** Determines if the adventure is complete, that is, if the player has won. */
-  def isComplete = this.player.location == this.destination && player.has("remote") && player.has("battery")
+  def isComplete = this.player.location == this.destination && player.has("remote") && player.has("battery") && player.correctWord
 
   /** Determines whether the player has won, lost, or quit, thereby ending the game. */
   def isOver = this.isComplete || this.player.hasQuit || this.turnCount == this.timeLimit
