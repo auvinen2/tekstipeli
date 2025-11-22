@@ -57,6 +57,8 @@ class Player(startingArea: Area):
     this.location.removeLetter(letter)
     s"You remember the letter ${letter.toUpperCase} oddly well."
 
+  def allLetters = this.letters
+
   def check =
     if this.letters.nonEmpty then
       s"You have found these letters: \n${this.letters.flatMap(_.toUpperCase).mkString(", ")}"
@@ -86,7 +88,7 @@ class Player(startingArea: Area):
 
     destination match {
       case Some(area) =>
-        if area.name == "Home" then
+        if area.name == "Home" && this.location.name == "Dead Tree Forest" then
           def tonttu() =
             val art =
               """
