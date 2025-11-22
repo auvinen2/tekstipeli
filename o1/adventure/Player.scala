@@ -13,8 +13,10 @@ class Player(startingArea: Area):
 
   private var currentLocation = startingArea        // gatherer: changes in relation to the previous location
   private var quitCommandGiven = false              // one-way flag
+  
+  private var isHidden = false                      //kertoo, onko pelaaja "piilossa"
 
-  private var letters = Vector[String]()
+  private var letters = Vector[String]()            //kerättyjen kirajimien säilyttäjä
 
   /** Determines if the player has indicated a desire to quit the game. */
   def hasQuit = this.quitCommandGiven
@@ -74,10 +76,25 @@ class Player(startingArea: Area):
   /** Attempts to move the player in the given direction. This is successful if there
     * is an exit from the player’s current location towards the direction name. Returns
     * a description of the result: "You go DIRECTION." or "You can't go DIRECTION." */
+  //pelaaja liikkuu vain, jos ei ole piilossa
   def go(direction: String) =
     val destination = this.location.neighbor(direction)
-    this.currentLocation = destination.getOrElse(this.currentLocation)
-    if destination.isDefined then s"You go $direction." else s"You can't go $direction."
+    if this.isHidden then                                                         
+      "You can't move while you are hidden! You have to 'unhide' yourself first." 
+    else
+      this.currentLocation = destination.getOrElse(this.currentLocation)
+      if destination.isDefined then 
+        s"You go $direction." 
+      else s"You can't go $direction."
+      
+  //piiloutuminen ja esiintulo
+  def hide() = 
+    this.isHidden = true
+    "You are now hidden. Try to stay quiet."
+    
+  def unhide() = 
+    this.isHidden = false
+    "You are no longer hiding. Remember to watch out."
 
 
   /** Causes the player to rest for a short while (this has no substantial effect in game terms).

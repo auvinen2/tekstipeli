@@ -32,6 +32,7 @@ class Adventure:
 
 /* sijaintien suhteet siten, kuin kartassa olisi kompassiruusu 
 (pohjoinen ylhäällä, itä oikealla jne)*/
+  //huom. polulle ei ole asetettu kaverin kotia naapuriksi, niin sinne ei pääse takaisin
   kaverinKoti.setNeighbors(Vector(                        "east" -> polku,    "south" -> home                            ))
   polku      .setNeighbors(Vector("north" -> metsa,       "east" -> silta,    "south" -> kallio                          ))
   kallio     .setNeighbors(Vector("north" -> polku,                           "south" -> luola                           ))
@@ -68,22 +69,23 @@ class Adventure:
 
 
   /** Determines if the adventure is complete, that is, if the player has won. */
-  def isComplete = this.player.location == this.destination && player.has("remote") && player.has("battery")
+  // muutin et riittää et se on kotona
+  def isComplete = this.player.location == this.destination
 
   /** Determines whether the player has won, lost, or quit, thereby ending the game. */
   def isOver = this.isComplete || this.player.hasQuit || this.turnCount == this.timeLimit
 
   /** Returns a message that is to be displayed to the player at the beginning of the game. */
-  def welcomeMessage = "You have had an awesome night at your friend's house, but it's gettin late. \nYou should definitely start heading home."
+  def welcomeMessage = "You have had an awesome night at your friend's house, but it's getting late. \nYou should definitely start heading home."
 
 
   /** Returns a message that is to be displayed to the player at the end of the game. The message
     * will be different depending on whether the player has completed their quest. */
   def goodbyeMessage =
     if this.isComplete then
-      "Home at last... and phew, just in time! Well done!"
+      "What a journey. Maybe next time you'll bring a flashlight."
     else if this.turnCount == this.timeLimit then
-      "Oh no! Time's up. Starved of entertainment, you collapse and weep like a child.\nGame over!"
+      "Oh no! Time's up. Guess you'll never get out of the woods. \nGame over!"
     else  // game over due to player quitting
       "Quitter!"
 
