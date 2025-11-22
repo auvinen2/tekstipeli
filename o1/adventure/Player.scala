@@ -81,23 +81,8 @@ class Player(startingArea: Area):
     * a description of the result: "You go DIRECTION." or "You can't go DIRECTION." */
   //pelaaja liikkuu vain, jos ei ole piilossa
   def go(direction: String): String =
+
     val destination = this.location.neighbor(direction)
-    if this.isHidden then
-      "You can't move while you are hidden! You have to 'unhide' yourself first."
-    else
-      this.currentLocation = destination.getOrElse(this.currentLocation)
-      if destination.isDefined then
-        s"You go $direction."
-      else s"You can't go $direction."
-
-  //piiloutuminen ja esiintulo
-  def hide() =
-    this.isHidden = true
-    "You are now hidden. Try to stay quiet."
-
-  def unhide() =
-    this.isHidden = false
-    "You are no longer hiding. Remember to watch out."
 
     destination match {
       case Some(area) =>
@@ -122,15 +107,24 @@ class Player(startingArea: Area):
             "The fear starts to settle. A warm feeling passes over you... You go home."
           else
             "You can't go home yet. There are still secrets you have to unravel."
-        else
-          this.currentLocation = area
-          s"You go $direction."
-
+        else if this.isHidden then
+          "You can't move while you are hidden! You have to 'unhide' yourself first."
+          else
+            this.currentLocation = destination.getOrElse(this.currentLocation)
+            s"You go $direction."
       case None =>
         s"You can't go $direction."
     }
 
 
+  //piiloutuminen ja esiintulo
+  def hide() =
+    this.isHidden = true
+    "You are now hidden. Try to stay quiet."
+
+  def unhide() =
+    this.isHidden = false
+    "You are no longer hiding. Remember to watch out."
 
 
   /** Causes the player to rest for a short while (this has no substantial effect in game terms).
