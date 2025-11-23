@@ -1,0 +1,29 @@
+Pelin voittaa pääsemällä kotiin. Tämä onnistuu
+
+1) Keräämällä metsästä tarvittamat kirjaimet koodiin ja syöttää koodi “FEAR” “Dead Tree Forest”:ssa
+   sitä kysyvälle tontulle. Lisäksi tulee selvitä törmäämättä metsässä liikkuvaan olentoon, joka lähtee
+   luolasta jahtaamaan.
+
+2) Valitsemalla ensimmäisessä ruudussa olla menemättä metsään.
+
+
+Uudet komennot:
+
+hide: piiloutuu jahtaavalta olennolta. Kun olet piiloutunut, et voi liikkua.
+unhide: tuo pelihahmon takaisin esiin piilosta
+remember: lisää hahmon listaan löydetyn kirjaimen
+check: luettelee hahmon listassa olevat kirjaimet.
+
+
+Walkthrough:
+
+Aloitat kaverin kotoa (kts. "spoilerMap"). Voitat pelin valitsemalla tässä “go south”.
+Huomaa, että valitessasi “go east" et pääse enää takaisin alkuun.
+
+Jos valitset "go east", kierrä metsä ja kerää löydetyt kirjaimet (sijainnit "spoilerMap":ssa)
+remember + kirjain –komennolla listaan. Päästessäsi kelokkoon (“Dead Tree Forest”)
+käytä check –komentoa tarkastamaan kirjaimesi, ja muodosta niistä sana (FEAR).
+Syötä tämä sitä kysyvälle tontulle, kun pyrit liikkumaan itään kohti maalia.
+Luolasta (“Cave”) perääsi lähtee olio, jolta voi piiloutua hide-komennolla.
+Jos et piiloudu onnistuneesti, häviät pelin.
+

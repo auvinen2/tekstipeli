@@ -53,9 +53,15 @@ class Player(startingArea: Area):
       }
 
   def remember(letter: String) =
-    this.letters = this.letters :+ letter
-    this.location.removeLetter(letter)
-    s"You remember the letter ${letter.toUpperCase} oddly well."
+    if this.letters.contains(letter) then
+      "You already found this letter! There might be others still hidden somewhere."
+    else
+      if letter == "f" || letter == "e" || letter == "a" || letter == "r" then
+        this.letters = this.letters :+ letter
+        this.location.removeLetter(letter)
+        s"You remember the letter ${letter.toUpperCase} oddly well."
+      else
+        "Are you starting to hallucinate already? Are you sure you typed that quite right..."
 
   def allLetters = this.letters
 
@@ -139,6 +145,15 @@ class Player(startingArea: Area):
   def quit() =
     this.quitCommandGiven = true
     ""
+
+  def help() =
+    "You need to find the pieces of a code in the forest and get the correct code to get home to win.\n" +
+      "These commands will help you:\n" +
+      "go + direction: moves the character\n" +
+      "hide: hides you character from something dangerous\n" +
+      "unhide: allows you to move again\n" +
+      "remember + char: adds the found piece on information to your list\n" +
+      "check: prints out a list of the pieces you've found"
 
 
   /** Returns a brief description of the player’s state, for debugging purposes. */
