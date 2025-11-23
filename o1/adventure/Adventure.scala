@@ -73,7 +73,7 @@ class Adventure:
   def isComplete = this.player.location == this.destination
 
   /** Determines whether the player has won, lost, or quit, thereby ending the game. */
-  def isOver = this.isComplete || this.player.hasQuit || this.turnCount == this.timeLimit
+  def isOver = this.isComplete || this.player.hasQuit || this.turnCount == this.timeLimit || this.player.chasing && this.player.turns <= 0
 
   /** Returns a message that is to be displayed to the player at the beginning of the game. */
   def welcomeMessage = "You have had an awesome night at your friend's house, but it's getting late. \nYou should definitely start heading home."
@@ -96,9 +96,30 @@ class Adventure:
   def playTurn(command: String): String =
     val action = Action(command)
     val outcomeReport = action.execute(this.player)
+    var jahti: String = ""
+    
+    //advancechase palauttaa stringin riippuen siirtojen määrästä ja var jahti tsiigaa sen mukaa outcomereportin
+    if player.chasing && !player.isHidden then
+      jahti = player.advanceChase()  
+  
+    if jahti.contains("Game Over!") then
+      return jahti
+  
     if outcomeReport.isDefined then
       this.turnCount += 1
-    outcomeReport.getOrElse(s"""Unknown command: "$command".""")
+  
+    if jahti.nonEmpty then
+      outcomeReport.getOrElse(s"""Unknown command: "$command".""") + "\n" + jahti
+    else
+      outcomeReport.getOrElse(s"""Unknown command: "$command".""")
+
+    /*if player.location.name == "Dark Cave" && !player.chasing && !player.isHidden then
+      player.startChase()
+
+    if outcomeReport.isDefined then
+      this.turnCount += 1
+    outcomeReport.getOrElse(s"""Unknown command: "$command".""")*/
+
 
 
 end Adventure
