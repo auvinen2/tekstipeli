@@ -108,16 +108,15 @@ class Player(startingArea: Area):
     if this.isHidden then
       return "You can't move while you are hidden! You have to 'unhide' yourself first."
 
-    val destinationOpt = this.location.neighbor(direction)
-    destinationOpt match {
-      case None => s"You can't go $direction."
+    this.location.neighbor(direction) match {
+
+      case None =>
+        return s"You can't go $direction."
 
       case Some(area) =>
-        this.currentLocation = area
-        var msg = s"You go $direction."
 
-        // koti + tonttu
-        if area.name == "Home" then
+        // koti ja tonttu
+        if area.name == "Home" && this.currentLocation.name != "Your friend's place" then
           val art =
             """
               |    /\
@@ -128,15 +127,23 @@ class Player(startingArea: Area):
               |    / \
               |""".stripMargin
           println(art)
+
           val word = readLine("You see a little gnome. The little gnome asks: 'What do you feel?' ").toUpperCase
+
           if word == "FEAR" then
             correctWord = true
-            msg = "The fear starts to settle. A warm feeling passes over you... You go home."
+            this.currentLocation = area
+            return "The fear starts to settle. A warm feeling passes over you... You go home."
           else
-            msg = "You can't go home yet. There are still secrets you have to unravel."
+            return "You can't go home yet. There are still secrets you have to unravel."
 
-        // luola + jahtaava hahmo
-        else if area.name == "Dark Cave" then
+        // koti suoraan alotuksesta ilman tonttua
+        if area.name == "Home" && this.currentLocation.name == "Your friend's place" then
+          this.currentLocation = area
+          return s"You go $direction."
+
+        //luola ja jahtaava hahmo
+        if area.name == "Dark Cave" then
           val art =
             """
               |   o
@@ -144,14 +151,52 @@ class Player(startingArea: Area):
               |  / \
               |""".stripMargin
           println(art)
-          if !this.chasing then
-            msg += "\n" + startChase()
 
-        msg
+          this.currentLocation = area
+          if !this.chasing then
+            return s"You go $direction.\n" + startChase()
+          else
+            return s"You go $direction."
+
+        if area.name == "The Creaky Bridge" then
+          val art =
+            """
+              |   .---.
+              |  /     \
+              | |  o o  |
+              |  \  ^  /
+              |   '---'
+              |""".stripMargin
+          println(art)
+          this.currentLocation = area
+          return "There’s an ominous skull awaiting at the bridge."
+
+
+        if area.name == "Thick Brushwood of Spruces" then
+          val art =
+            """+------------+
+              ||   .----.  |
+              ||  / o  o \ |
+              ||  |  ..  | |
+              ||  \  --  / |
+              ||   `----'  |
+              ||  WAKE UP  |
+              |+------------+""".stripMargin
+          println(art)
+          this.currentLocation = area
+          return """
+          |R̴͐͂́̈́̌̌͛̌̉̅̓̊̇̊̂̒̓̿͒̕͝͝
+          |U̸̲̪̜̼̳͖̱̻͇̜̔̅̆̈́
+          |Ñ̴͂͆̿̐̑͗͗̑̌͑̄
+          |""".stripMargin
+
+        //normaali liikkuminen
+        this.currentLocation = area
+        return s"You go $direction."
     }
 
 
-  //lisäsin jahdin ehdoksi
+  //lisäsin jahdin ehoksi
   def hide(): String =
     if chasing then
       chasing = false
