@@ -17,13 +17,13 @@ check: luettelee hahmon listassa olevat kirjaimet.
 
 Walkthrough:
 
-Aloitat kaverin kotoa (kts. "spoilerMap"). Voitat pelin valitsemalla tässä “go south”.
-Huomaa, että valitessasi “go east" et pääse enää takaisin alkuun.
-
-Jos valitset "go east", kierrä metsä ja kerää löydetyt kirjaimet (sijainnit "spoilerMap":ssa)
+Aloitat kaverin kotoa (kts. "spoilerMap"). Valitsemalla "go east", pääset metsään, josta
+peli alkaa varsinaisesti. Kierrä metsä ja kerää löydetyt kirjaimet (sijainnit "spoilerMap":ssa)
 remember + kirjain –komennolla listaan. Päästessäsi kelokkoon (“Dead Tree Forest”)
 käytä check –komentoa tarkastamaan kirjaimesi, ja muodosta niistä sana (FEAR).
 Syötä tämä sitä kysyvälle tontulle, kun pyrit liikkumaan itään kohti maalia.
-Luolasta (“Cave”) perääsi lähtee olio, jolta voi piiloutua hide-komennolla.
-Jos et piiloudu onnistuneesti, häviät pelin.
+Luolasta (“Cave”) perääsi lähtee olio, jolta voi piiloutua hide-komennolla. Syötä hide,
+kun konsoliin tulee ilmoitus "Turns left: 1" Jos et piiloudu onnistuneesti, häviät pelin.
+
+Pelin voi "voittaa" myös valitsemalla alussa kiertotien kotiin, eli "go south". Oppimiskokemus sekin.
 

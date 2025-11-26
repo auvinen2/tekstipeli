@@ -231,10 +231,10 @@ class Player(startingArea: Area):
     ""
 
   def help() =
-    "You need to find the pieces of a code in the forest and get the correct code to get home to win.\n" +
-      "These commands will help you:\n" +
+    "\nYou need to find the pieces of a code in the forest and get the correct code to get home to win.\n" +
+      "\nThese commands will help you:\n" +
       "go + direction: moves the character\n" +
-      "hide: hides you character from something dangerous\n" +
+      "hide: hides your character from something dangerous\n" +
       "unhide: allows you to move again\n" +
       "remember + char: adds the found piece on information to your list\n" +
       "check: prints out a list of the pieces you've found"

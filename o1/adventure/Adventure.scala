@@ -51,7 +51,7 @@ class Adventure:
   //clearing.addItem(Item("battery", "It's a small battery cell. Looks new."))
   //southForest.addItem(Item("remote", "It's the remote control for your TV.\nWhat it was doing in the forest, you have no idea.\nProblem is, there's no battery."))
 
-  //lisätään kirjaimet oikeisiin sijainteigohin!
+  //lisätään kirjaimet oikeisiin sijainteihin!
 
   metsa.addLetter("F")
   luola.addLetter("E")
@@ -83,7 +83,7 @@ class Adventure:
     * will be different depending on whether the player has completed their quest. */
   def goodbyeMessage =
     if this.isComplete then
-      "You made it home safe! What a journey. Maybe next time you'll bring a flashlight."
+      "Finally, you made it home safe! Time to go to bed."
     else if this.turnCount == this.timeLimit then
       "Oh no! Time's up. Guess you'll never get out of the woods. \nGame over!"
     else  // game over due to player quitting

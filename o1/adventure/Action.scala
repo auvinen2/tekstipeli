@@ -28,6 +28,7 @@ class Action(input: String):
       case "check"     => Some(s"${actor.check}")
       case "hide"      => Some(actor.hide())
       case "unhide"    => Some(actor.unhide())
+      case "help"      => Some(actor.help())
       case other       => None
 
   /** Returns a textual description of the action object, for debugging purposes. */
