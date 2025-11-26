@@ -17,11 +17,21 @@ object AdventureTextUI extends App:
     * play any number of turns until the game is over, and finally a goodbye message is printed. */
   private def run() =
     println(this.game.welcomeMessage)
-    while !this.game.isOver do
+    var gameEnded = false
+    while !gameEnded do
       this.printAreaInfo()
-      this.playTurn()
-    println("\n" + this.game.goodbyeMessage)
 
+      // nyt adventuren playturn palauttaa "game over" jos jahdin siirrot on loppunut, lopettaa pelin sillon
+      if this.game.isOver then
+        gameEnded = true
+      else
+        val turnReport = this.playTurn()
+        if turnReport.nonEmpty then
+          println(turnReport)
+        if turnReport.contains("Game Over!") then
+          gameEnded = true
+
+    println("\n" + this.game.goodbyeMessage)
 
   /** Prints out a description of the player character’s current location, as seen by the character. */
   private def printAreaInfo() =
@@ -33,12 +43,11 @@ object AdventureTextUI extends App:
 
   /** Requests a command from the player, plays a game turn accordingly, and prints out a
     * report of what happened.  */
-  private def playTurn() =
+  private def playTurn(): String =
     println()
     val command = readLine("Command: ")
     val turnReport = this.game.playTurn(command)
-    if turnReport.nonEmpty then
-      println(turnReport)
+    turnReport  // palautetaan String
 
 end AdventureTextUI
 

@@ -15,11 +15,35 @@ class Player(startingArea: Area):
   private var currentLocation = startingArea        // gatherer: changes in relation to the previous location
   private var quitCommandGiven = false              // one-way flag
 
-  private var isHidden = false                      //kertoo, onko pelaaja "piilossa"
+  var isHidden = false                      //kertoo, onko pelaaja "piilossa"
 
   private var letters = Vector[String]()            //kerättyjen kirajimien säilyttäjä
 
   var correctWord = false
+
+  var chasing = false
+  var turns = 0
+
+  //alottaa jahdin
+  def startChase(): String =
+    if !chasing then
+      chasing = true
+      turns = 3 
+      "A shadowy figure appears and starts chasing you!"
+    else
+      ""
+  
+  //tarkistaa jos on menny 2 siirtoa nii peli loppuu, ehto päivitetty adventuren isOver ja textUI run metodeihin
+  def advanceChase(): String =
+    if chasing then
+      turns -= 1
+      if turns <= 0 then
+        chasing = false
+        "The shadowy figure catches you... You die!\nGame Over!"
+      else
+        s"The shadowy figure is getting closer! Turns left: $turns"
+    else
+      ""
 
   /** Determines if the player has indicated a desire to quit the game. */
   def hasQuit = this.quitCommandGiven
@@ -63,8 +87,6 @@ class Player(startingArea: Area):
       else
         "Are you starting to hallucinate already? Are you sure you typed that quite right..."
 
-  def allLetters = this.letters
-
   def check =
     if this.letters.nonEmpty then
       s"You have found these letters: \n${this.letters.flatMap(_.toUpperCase).mkString(", ")}"
@@ -87,48 +109,110 @@ class Player(startingArea: Area):
   /** Attempts to move the player in the given direction. This is successful if there
     * is an exit from the player’s current location towards the direction name. Returns
     * a description of the result: "You go DIRECTION." or "You can't go DIRECTION." */
-  //pelaaja liikkuu vain, jos ei ole piilossa
+ 
   def go(direction: String): String =
+    if this.isHidden then
+      return "You can't move while you are hidden! You have to 'unhide' yourself first."
 
-    val destination = this.location.neighbor(direction)
+    this.location.neighbor(direction) match {
 
-    destination match {
+      case None =>
+        return s"You can't go $direction."
+
       case Some(area) =>
-        if area.name == "Home" && this.location.name == "Dead Tree Forest" then
-          def tonttu() =
-            val art =
-              """
-                |    /\
-                |   /  \
-                |  /____\
-                |   (o_o)
-                |   <| |>
-                |    / \
-                |""".stripMargin
-            println(art)
-          tonttu()
+
+        // koti ja tonttu
+        if area.name == "Home" && this.currentLocation.name != "Your friend's place" then
+          val art =
+            """
+              |    /\
+              |   /  \
+              |  /____\
+              |   (o_o)
+              |   <| |>
+              |    / \
+              |""".stripMargin
+          println(art)
+
           val word = readLine("You see a little gnome. The little gnome asks: 'What do you feel?' ").toUpperCase
 
           if word == "FEAR" then
             correctWord = true
             this.currentLocation = area
-            "The fear starts to settle. A warm feeling passes over you... You go home."
+            return "The fear starts to settle. A warm feeling passes over you... You go home."
           else
-            "You can't go home yet. There are still secrets you have to unravel."
-        else if this.isHidden then
-          "You can't move while you are hidden! You have to 'unhide' yourself first."
+            return "You can't go home yet. There are still secrets you have to unravel."
+
+        // koti suoraan alotuksesta ilman tonttua
+        if area.name == "Home" && this.currentLocation.name == "Your friend's place" then
+          this.currentLocation = area
+          return s"You go $direction."
+
+        //luola ja jahtaava hahmo
+        if area.name == "Dark Cave" then
+          val art =
+            """
+              |   o
+              |  /|\/
+              |  / \
+              |""".stripMargin
+          println(art)
+
+          this.currentLocation = area
+          if !this.chasing then
+            return s"You go $direction.\n" + startChase()
           else
-            this.currentLocation = destination.getOrElse(this.currentLocation)
-            s"You go $direction."
-      case None =>
-        s"You can't go $direction."
+            return s"You go $direction."
+
+        if area.name == "The Creaky Bridge" then
+          val art =
+            """
+              |   .---.
+              |  /     \
+              | |  o o  |
+              |  \  ^  /
+              |   '---'
+              |""".stripMargin
+          println(art)
+          this.currentLocation = area
+          return "There’s an ominous skull awaiting at the bridge."
+
+
+        if area.name == "Thick Brushwood of Spruces" then
+          val art =
+            """+------------+
+              ||   .----.  |
+              ||  / o  o \ |
+              ||  |  ..  | |
+              ||  \  --  / |
+              ||   `----'  |
+              ||  WAKE UP  |
+              |+------------+""".stripMargin
+          println(art)
+          this.currentLocation = area
+          return """
+          |R̴͐͂́̈́̌̌͛̌̉̅̓̊̇̊̂̒̓̿͒̕͝͝
+          |U̸̲̪̜̼̳͖̱̻͇̜̔̅̆̈́
+          |Ñ̴͂͆̿̐̑͗͗̑̌͑̄
+          |""".stripMargin
+
+        //normaali liikkuminen
+        this.currentLocation = area
+        return s"You go $direction."
     }
 
 
-  //piiloutuminen ja esiintulo
-  def hide() =
-    this.isHidden = true
-    "You are now hidden. Try to stay quiet."
+  //lisäsin jahdin ehoksi
+  def hide(): String =
+    if chasing then
+      chasing = false
+      turns = 0
+      this.isHidden = true
+      "Shh... the shadow walks past you. You are safe now."
+    else
+      this.isHidden = true
+      "You are now hidden. Try to stay quiet."
+
 
   def unhide() =
     this.isHidden = false

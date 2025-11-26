@@ -19,8 +19,8 @@ class Adventure:
   private val polku       = Area("Path", "Ooh. it's getting darker in here. Well, can't turn back now.")
   private val kallio      = Area("Cliff", "That's a steep drop right there! \nYou have to walk carefully, in case it's slippery.")
   private val luola       = Area("Dark Cave", "This is kind of spooky... I don't remember this being here? \nWait, is that a letter painted on the wall? And who's that?!?!")
-  private val tiheikko    = Area("Thick Brushwood of Spruces", "Ouch, the spruce needles really hurt against your face! \nYou struggle to keep your eyes open.")
-  private val kelokko     = Area("Dead Tree Forest", "The mighty dead pines stand before you, swaying lightly with the wind. \nYou feel you're getting closer to home. And seroiusly, is that a carving?")
+  private val tiheikko    = Area("Thick Brushwood of Spruces", "Ouch, the spruce needles really hur̴͐t against your face!̴̛̈́̌̓̿̇̾̔̽̚̕͝\nYou struggle to ǩ̉̅̓̊̇͝͝e̊ep your eyes open.̶̷̸̵̴̶̷̸̴\nR̷U̶N̷U̴N̶R̴U̷N̵")
+  private val kelokko     = Area("Dead Tree Forest", "The m̷i̶g̴h̷t̴y dead p̶i̵n̸e̷s stand before y̴o̷u, sw̵a̶y̶ing lightly w̸i̷th the wind.\nYou f̷e̶e̷l you're getting cl̶o̸s̵e̶r to home. And seriously, is that a c̴a̵r̶v̶i̵n̶g?")
   private val aukio       = Area("Forest Clearing", "At least the starry sky looks pretty. \nJust like the one you programmed during O1.")
   private val lampi       = Area("Duck Pond", "You can't see any ducks. What could've scared them away?")
   private val kaivo       = Area("The Old Well", "The silhouette of the well is almost visible in the darkness.")
@@ -73,7 +73,7 @@ class Adventure:
   def isComplete = this.player.location == this.destination
 
   /** Determines whether the player has won, lost, or quit, thereby ending the game. */
-  def isOver = this.isComplete || this.player.hasQuit || this.turnCount == this.timeLimit
+  def isOver = this.isComplete || this.player.hasQuit || this.turnCount == this.timeLimit || this.player.chasing && this.player.turns <= 0
 
   /** Returns a message that is to be displayed to the player at the beginning of the game. */
   def welcomeMessage = "You have had an awesome night at your friend's house, but it's getting late. \nYou should definitely start heading home."
@@ -96,9 +96,30 @@ class Adventure:
   def playTurn(command: String): String =
     val action = Action(command)
     val outcomeReport = action.execute(this.player)
+    var jahti: String = ""
+    
+    //advancechase palauttaa stringin riippuen siirtojen määrästä ja var jahti tsiigaa sen mukaa outcomereportin
+    if player.chasing && !player.isHidden then
+      jahti = player.advanceChase()  
+  
+    if jahti.contains("Game Over!") then
+      return jahti
+  
     if outcomeReport.isDefined then
       this.turnCount += 1
-    outcomeReport.getOrElse(s"""Unknown command: "$command".""")
+  
+    if jahti.nonEmpty then
+      outcomeReport.getOrElse(s"""Unknown command: "$command".""") + "\n" + jahti
+    else
+      outcomeReport.getOrElse(s"""Unknown command: "$command".""")
+
+    /*if player.location.name == "Dark Cave" && !player.chasing && !player.isHidden then
+      player.startChase()
+
+    if outcomeReport.isDefined then
+      this.turnCount += 1
+    outcomeReport.getOrElse(s"""Unknown command: "$command".""")*/
+
 
 
 end Adventure
